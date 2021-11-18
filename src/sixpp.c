@@ -1,4 +1,4 @@
-#include "sixel.h"
+#include "sixpp.h"
 
 #include <stdio.h>
 

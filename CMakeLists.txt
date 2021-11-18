@@ -14,7 +14,17 @@ list(APPEND CMAKE_MODULE_PATH "${ROOT}/cmake")
 include(libsixel)
 include_directories(${LIBSIXEL_INCLUDE})
 
+set(PPROF_INCLUDE "${ROOT}")
+set(PPROF_SRC "${ROOT}/proto/pprof.pb-c.c")
+
 #################################### Target ####################################
-add_executable(sixpp ${ROOT}/src/sixpp.c)
-target_link_libraries(sixpp libsixel)
-target_include_directories(${PROJECT_NAME} PRIVATE ${LIBSIXEL_ROOT}/include)
+include_directories(
+  ${ROOT}/include
+  ${ROOT}/proto)
+add_executable(${PROJECT_NAME} ${ROOT}/src/sixpp.c ${PPROF_SRC})
+target_link_libraries(${PROJECT_NAME}
+  libprotobuf-c.a
+  libsixel)
+target_include_directories(${PROJECT_NAME} PRIVATE
+  ${LIBSIXEL_ROOT}/include
+  ${PPROF_INCLUDE})
