@@ -17,7 +17,14 @@ double SPPTreeNode_draw(SPPTreeNode *node, PPProfile *profile, Canvas *canvas, i
   box.width *= w;
   if (box.width < 0.01)
     return box.width;
-  if (!Box_draw(canvas, &box, node->idx)) {
+
+  uint64_t mapping_id = 0;
+  if (node->idx > 0) {
+    PPLocation *location = profile->location[node->idx-1];
+    mapping_id = location->mapping_id;
+  }
+
+  if (!Box_draw(canvas, &box, mapping_id)) {
     return box.width;
   }
 
@@ -33,6 +40,9 @@ bool SPPTree_draw(SPPTree *tree, PPProfile *profile, Canvas *canvas) {
   for (int i = 0; i < node->sz; ++i)
     node->val += node->children[i].val;
   double height = 1.0/((double)tree->depth);
+
+  if (height > 0.05)
+    height = 0.05;
 
   // Now we're ready to start drawing the nodes
   SPPTreeNode_draw(node, profile, canvas, 0, 0.0, height, 1.0, node->val);
