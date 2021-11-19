@@ -60,6 +60,7 @@ bool render(char *path, Canvas *canvas, int dfd) {
   SPPTree_draw(&tree, profile, canvas);
   Canvas_render(canvas);
   SPPTreeNode_free(&tree.root);
+  Profile_free(profile);
   return true;
 }
 
@@ -121,6 +122,9 @@ int main(int n, char** v) {
 
     // Sit on the directory and wait
     void *buf = calloc(1, sizeof(struct inotify_event) + 1 + NAME_MAX); // path headroom
+    printf("\33[H");
+    printf("\033[?1;3;256S" "\033[?8452h" "\033[1;1'z");
+    fflush(stdout);
     while(1) {
       struct inotify_event *ie = NULL;
       int n = read(ifd, buf, sizeof(*ie) + 1 + NAME_MAX);
@@ -128,8 +132,13 @@ int main(int n, char** v) {
       while (n >= sizeof(*ie) + ie->len) {
         n -= sizeof(*ie) + ie->len;
         char *ext = strrchr(ie->name, '.');
-        if (ext && !strcmp(ext, ".pprof"))
+        if (ext && !strcmp(ext, ".pprof")) {
           render(ie->name, &canvas, dfd);
+          printf("\33[H");
+          fflush(stdout);
+        } else {
+          printf("Ignoring non-.pprof file %s\n", ie->name);
+        }
       }
     }
   } else {

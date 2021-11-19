@@ -64,6 +64,7 @@ bool SPPTree_frompprof(SPPTree *tree, PPProfile *pprof, int n);
 PPProfile *Profile_fromfd(int fd);
 PPProfile *Profile_frompath(char *path);
 PPProfile *Profile_frompathat(int dfd, char *path);
+void Profile_free(PPProfile *profile);
 
 // Data structures for Sixel stuff
 

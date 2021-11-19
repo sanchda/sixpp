@@ -7,6 +7,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+void Profile_free(PPProfile *profile) {
+  perftools__profiles__profile__free_unpacked(profile, NULL);
+}
+
 PPProfile *Profile_fromfd(int fd) {
   struct stat sa;
   if (-1 == fd)
