@@ -2,8 +2,27 @@
 
 #include <stdio.h>
 
-static int sixel_write(char *data, int size, void *priv) {
-  return fwrite(data, 1, size, (FILE *)priv);
+double SPPTreeNode_draw(SPPTreeNode *node, PPProfile *profile, Canvas *canvas, int depth, double x0, double h, int64_t val) {
+  Box box = {.height = h, .x0 = x0, .y0 = h*depth, .height = h};
+  box.width = ((double)node->val) / (double)val;
+  Box_draw(canvas, &box, node->idx & 255);
+
+  for (int i = 0; i < node->sz; ++i)
+    x0 += SPPTreeNode_draw(&node->children[i], profile, canvas, depth+1, x0, h, node->val);
+  printf(".");
+}
+
+bool SPPTree_draw(SPPTree *tree, PPProfile *profile, Canvas *canvas) {
+  SPPTreeNode *node = &tree->root;
+
+  // Sum up the values of the children for the root context
+  for (int i = 0; i < node->sz; ++i)
+    node->val += node->children[i].val;
+  double height = 1.0/((double)tree->depth);
+
+  // Now we're ready to start drawing the nodes
+  SPPTreeNode_draw(node, profile, canvas, 0, 0.01, height, node->val);
+  return true;
 }
 
 int main(int n, char** v) {
@@ -11,22 +30,9 @@ int main(int n, char** v) {
   Canvas canvas;
   if (!SixelContext_init(&ctx))
     return -1;
-  if (!Canvas_init(&canvas, 480, 640, &ctx))
+  if (!Canvas_init(&canvas, 2*480, 2*640, &ctx))
     return -1;
 
-  Box box = {0};
-  box.width = .25;
-  box.height = .25;
-  box.x0 = 0.2;
-  box.y0 = 0.6;
-  if (!Canvas_box_add(&canvas, &box, 0x11))
-    return -1;
-
-  if (!Canvas_draw(&canvas))
-    return -1;
-
-  printf("Good!\n");
-  return 0;
   PPProfile *profile = Profile_frompath(v[1]);
   if (!profile) {
     printf("Couldn't open pprof %s\n", v[1]);
@@ -36,8 +42,10 @@ int main(int n, char** v) {
   SPPTreeNode_init(&tree.root);
   if (!SPPTree_frompprof(&tree, profile, 0)) {
     printf("Couldn't traverse pprof %s\n", v[1]);
-//    return -1;
+    return -1;
   }
-  SPPTree_print(&tree, profile);
+
+  SPPTree_draw(&tree, profile, &canvas);
+  Canvas_render(&canvas);
   return 0;
 }

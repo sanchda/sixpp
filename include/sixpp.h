@@ -48,6 +48,7 @@ typedef struct SPPTreeNode {
 
 typedef struct SPPTree {
   SPPTreeNode root;
+  uint64_t depth;
 } SPPTree;
 
 bool SPPTreeNode_init(SPPTreeNode *node);
@@ -89,7 +90,7 @@ void sixel_printstatus(SIXELSTATUS status);
 
 bool SixelContext_init(SixelContext *ctx);
 
+bool Box_draw(Canvas *c, Box *b, char val);
 bool Canvas_init(Canvas *c, uint64_t h, uint64_t w, SixelContext *ctx);
 void Canvas_free(Canvas *c);
-bool Canvas_box_add(Canvas *c, Box *b, char val);
-bool Canvas_draw(Canvas *c);
+bool Canvas_render(Canvas *c);

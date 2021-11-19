@@ -28,7 +28,7 @@ bool Canvas_init(Canvas *c, uint64_t h, uint64_t w, SixelContext *ctx) {
   if (!h || !w)
     return false;
   memset(c, 0, sizeof(*c));
-  c->data = calloc(1, h*w);
+  c->data = calloc(3, h*w);
   if (!c->data)
     return false;
 
@@ -43,7 +43,7 @@ void Canvas_free(Canvas *c) {
   free(c->data);
   memset(c, 0, sizeof(*c));
 }
-bool Canvas_box_add(Canvas *c, Box *b, char val) {
+bool Box_draw(Canvas *c, Box *b, char val) {
   // OK, so we decided to have percentile boxes.  That means we need to scale
   // the Box into the Canvas and omit drawing if any of the dimensions are zero.
   uint64_t x0 = 0, y0 = 0, x1 = 0, y1 = 0;
@@ -75,7 +75,7 @@ bool Canvas_box_add(Canvas *c, Box *b, char val) {
     for (int j = y0; j < y1; ++j)
       c->data[c->width * j + i] = val;
 
-  // Draw border
+  // Draw one-pixel border
   for (int i = x0; i < x1; ++i) {
     c->data[c->width * y0 + i] = 0xff;
     c->data[c->width * y1 + i] = 0xff;
@@ -88,7 +88,7 @@ bool Canvas_box_add(Canvas *c, Box *b, char val) {
   return true;
 }
 
-bool Canvas_draw(Canvas *c) {
+bool Canvas_render(Canvas *c) {
   SIXELSTATUS status;
   sixel_dither_t *dither = c->ctx->dither;
   sixel_output_t *output = c->ctx->output;

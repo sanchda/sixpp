@@ -81,6 +81,8 @@ bool SPPTree_fromsample(SPPTree *tree, PPSample *sample, int n) {
       return false;
     }
     node = next;
+    if (i > tree->depth)
+      tree->depth = i;
   }
 
   return true;
