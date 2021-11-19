@@ -27,7 +27,7 @@ bool SixelContext_init(SixelContext *ctx) {
 bool Canvas_init(Canvas *c, uint64_t h, uint64_t w, SixelContext *ctx) {
   if (!h || !w)
     return false;
-  memset(c, 0, sizeof(*c));
+  memset(c, 0xff, sizeof(*c));
   c->data = calloc(3, h*w);
   if (!c->data)
     return false;
@@ -63,7 +63,7 @@ bool Box_draw(Canvas *c, Box *b, char val) {
   x0 = b->x0 * c->width;
   y0 = b->y0 * c->height;
   x1 = x0 + w * c->width;
-  y1 = x1 + h * c->height;
+  y1 = y0 + h * c->height;
 
   if (x1 > c->x1)
     x1 = c->x1;
@@ -75,15 +75,15 @@ bool Box_draw(Canvas *c, Box *b, char val) {
     for (int j = y0; j < y1; ++j)
       c->data[c->width * j + i] = val;
 
-  // Draw one-pixel border
-  for (int i = x0; i < x1; ++i) {
-    c->data[c->width * y0 + i] = 0xff;
-    c->data[c->width * y1 + i] = 0xff;
-  }
-  for (int j = y0; j < y1; ++j) {
-    c->data[c->width * j + x0] = 0xff;
-    c->data[c->width * j + x1] = 0xff;
-  }
+//  // Draw one-pixel border
+//  for (int i = x0; i < x1; ++i) {
+//    c->data[c->width * y0 + i] = 0xff;
+//    c->data[c->width * y1 + i] = 0xff;
+//  }
+//  for (int j = y0; j < y1; ++j) {
+//    c->data[c->width * j + x0] = 0xff;
+//    c->data[c->width * j + x1] = 0xff;
+//  }
 
   return true;
 }
