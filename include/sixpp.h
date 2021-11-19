@@ -42,7 +42,7 @@ typedef struct SPPTreeNode {
   struct SPPTreeNode *children; // An array of nodes
   uint64_t capacity; // Capacity to hold children
   uint64_t sz;  // number of existing children
-  uint64_t idx; // the location_id
+  int64_t idx; // the location_id
   uint64_t val; // Aggregated value
 } SPPTreeNode;
 
@@ -52,10 +52,12 @@ typedef struct SPPTree {
 
 bool SPPTreeNode_init(SPPTreeNode *node);
 bool SPPTreeNode_grow(SPPTreeNode *node);
-SPPTreeNode *SPPTreeNode_add(SPPTreeNode *node, uint64_t idx, uint64_t val);
+SPPTreeNode *SPPTreeNode_add(SPPTreeNode *node, int64_t idx, uint64_t val);
 void SPPTreeNode_free(SPPTreeNode *node);
+void SPPTree_print(SPPTree *node, PPProfile *profile);
+void SPPTreeNode_print(SPPTreeNode *tree, PPProfile *profile, int depth);
 
-bool SPPTree_fromsample(PPSample *sample, SPPTree *tree, int n);
-bool SPPTree_frompprof(PPProfile *pprof, SPPTree *tree, int n);
+bool SPPTree_fromsample(SPPTree *tree, PPSample *sample, int n);
+bool SPPTree_frompprof(SPPTree *tree, PPProfile *pprof, int n);
 
 PPProfile *Profile_frompath(char *path);

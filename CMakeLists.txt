@@ -17,6 +17,9 @@ set(ROOT "${CMAKE_CURRENT_LIST_DIR}")
 set(SRC "${ROOT}/src")
 list(APPEND CMAKE_MODULE_PATH "${ROOT}/cmake")
 
+
+include(ExtendBuildTypes)
+
 ################################# Dependencies #################################
 include(libsixel)
 include_directories(${LIBSIXEL_INCLUDE})
