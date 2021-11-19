@@ -1,6 +1,6 @@
 #include <stdbool.h>
 
-#include "sixel.h"
+#include <sixel.h>
 #include "proto/pprof.pb-c.h"
 
 // Make the pprof type names shorter
@@ -61,3 +61,35 @@ bool SPPTree_fromsample(SPPTree *tree, PPSample *sample, int n);
 bool SPPTree_frompprof(SPPTree *tree, PPProfile *pprof, int n);
 
 PPProfile *Profile_frompath(char *path);
+
+// Data structures for Sixel stuff
+
+typedef struct SixelContext {
+  sixel_encoder_t *enc;
+  sixel_dither_t *dither;
+  sixel_output_t *output;
+} SixelContext;
+// Canvas has slightly duplicatory fields, but whatever
+typedef struct Canvas {
+  SixelContext *ctx;
+  uint64_t width;
+  uint64_t height;
+  int x0, y0; // upper-left corner of convas
+  int x1, y1; // lower-right corner of canvas
+  char *data;
+} Canvas;
+
+typedef struct Box {
+  double width;
+  double height;
+  double x0, y0; // corner as a fraction of the convas
+} Box;
+
+void sixel_printstatus(SIXELSTATUS status);
+
+bool SixelContext_init(SixelContext *ctx);
+
+bool Canvas_init(Canvas *c, uint64_t h, uint64_t w, SixelContext *ctx);
+void Canvas_free(Canvas *c);
+bool Canvas_box_add(Canvas *c, Box *b, char val);
+bool Canvas_draw(Canvas *c);

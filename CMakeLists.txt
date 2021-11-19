@@ -39,6 +39,7 @@ add_executable(${PROJECT_NAME}
   ${SRC}/sixpp.c
   ${SRC}/tree.c
   ${SRC}/profile.c
+  ${SRC}/canvas.c
   ${PPROF_SRC})
 target_link_libraries(${PROJECT_NAME}
   /usr/lib/x86_64-linux-gnu/libprotobuf.a
