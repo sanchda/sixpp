@@ -73,7 +73,8 @@ bool SPPTree_fromsample(SPPTree *tree, PPSample *sample, int n) {
   if (n < 0 || n >= sample->n_value)
     return false;
   int64_t val = sample->value[n];
-  for (int i = 0; i < sample->n_location_id; ++i) {
+//  for (int i = 0; i < sample->n_location_id; ++i) {
+  for (int i = sample->n_location_id - 1; i >= 0; --i) {
     next = SPPTreeNode_add(node, sample->location_id[i], val);
     if (!next) {
       // This is bad.  We've populated the partial tree, but don't have a valid
