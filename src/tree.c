@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define COHORT_SIZE 32
+#define COHORT_SIZE 16
 
 bool SPPTreeNode_init(SPPTreeNode *node) {
   memset(node, 0, sizeof(*node));
