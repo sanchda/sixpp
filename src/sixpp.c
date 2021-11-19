@@ -130,6 +130,10 @@ int main(int n, char** v) {
       return -1;
     }
 
+    // Setup a thing to clear the screen
+    Canvas canvas2 = {0};
+    Canvas_init(&canvas2, canvas.height, canvas.width, canvas.ctx);
+
     // Sit on the directory and wait
     void *buf = calloc(1, sizeof(struct inotify_event) + 1 + NAME_MAX); // path headroom
     printf("\33[H");
@@ -146,6 +150,7 @@ int main(int n, char** v) {
           render(ie->name, &canvas, dfd);
           printf("\33[H");
           fflush(stdout);
+          Canvas_clear(&canvas);
         } else {
           printf("Ignoring non-.pprof file %s\n", ie->name);
         }

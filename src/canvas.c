@@ -43,6 +43,11 @@ void Canvas_free(Canvas *c) {
   free(c->data);
   memset(c, 0, sizeof(*c));
 }
+
+void Canvas_clear(Canvas *c) {
+  memset(c->data, 0, 3*c->height*c->width);
+}
+
 bool Box_draw(Canvas *c, Box *b, char val) {
   // OK, so we decided to have percentile boxes.  That means we need to scale
   // the Box into the Canvas and omit drawing if any of the dimensions are zero.

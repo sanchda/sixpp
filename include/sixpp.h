@@ -95,5 +95,6 @@ bool SixelContext_init(SixelContext *ctx);
 
 bool Box_draw(Canvas *c, Box *b, char val);
 bool Canvas_init(Canvas *c, uint64_t h, uint64_t w, SixelContext *ctx);
+void Canvas_clear(Canvas *c);
 void Canvas_free(Canvas *c);
 bool Canvas_render(Canvas *c);
