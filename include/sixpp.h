@@ -61,7 +61,9 @@ void SPPTreeNode_print(SPPTreeNode *tree, PPProfile *profile, int depth);
 bool SPPTree_fromsample(SPPTree *tree, PPSample *sample, int n);
 bool SPPTree_frompprof(SPPTree *tree, PPProfile *pprof, int n);
 
+PPProfile *Profile_fromfd(int fd);
 PPProfile *Profile_frompath(char *path);
+PPProfile *Profile_frompathat(int dfd, char *path);
 
 // Data structures for Sixel stuff
 

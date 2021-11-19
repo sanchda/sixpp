@@ -7,11 +7,11 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-PPProfile *Profile_frompath(char *path) {
-  // Open file and get size
+PPProfile *Profile_fromfd(int fd) {
   struct stat sa;
-  int fd = open(path, O_RDONLY);
-  if (-1 == fd || fstat(fd, &sa))
+  if (-1 == fd)
+    return NULL;
+  if (fstat(fd, &sa))
     return NULL;
   size_t sz = sa.st_size;
 
@@ -22,4 +22,16 @@ PPProfile *Profile_frompath(char *path) {
     return NULL;
 
   return perftools__profiles__profile__unpack(0, sz, data);
+}
+
+PPProfile *Profile_frompath(char *path) {
+  int fd = open(path, O_RDONLY);
+  return Profile_fromfd(fd);
+}
+
+PPProfile *Profile_frompathat(int dfd, char *path) {
+  if (-1 == dfd)
+    return NULL;
+  int fd = openat(dfd, path, O_RDONLY);
+  return Profile_fromfd(fd);
 }
