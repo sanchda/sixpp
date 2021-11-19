@@ -39,12 +39,23 @@ MINPP(Function);
 
 // TODO would it be better to put the children in common storage in an LSMT?
 typedef struct SPPTreeNode {
-  struct SPPTreeNode **children;
+  struct SPPTreeNode *children; // An array of nodes
   uint64_t capacity; // Capacity to hold children
   uint64_t sz;  // number of existing children
   uint64_t idx; // the location_id
   uint64_t val; // Aggregated value
 } SPPTreeNode;
 
+typedef struct SPPTree {
+  SPPTreeNode root;
+} SPPTree;
+
 bool SPPTreeNode_init(SPPTreeNode *node);
-bool SPPTreeNode_add(SPPTreeNode *node, uint64_t idx, uint64_t val);
+bool SPPTreeNode_grow(SPPTreeNode *node);
+SPPTreeNode *SPPTreeNode_add(SPPTreeNode *node, uint64_t idx, uint64_t val);
+void SPPTreeNode_free(SPPTreeNode *node);
+
+bool SPPTree_fromsample(PPSample *sample, SPPTree *tree, int n);
+bool SPPTree_frompprof(PPProfile *pprof, SPPTree *tree, int n);
+
+PPProfile *Profile_frompath(char *path);
