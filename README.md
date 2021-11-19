@@ -17,3 +17,11 @@ sixpp myprofile.pprof <height> <width>
 will visualize `myprofile.pprof` on a rectangular canvas.
 
 If you like animations, replace `myprofile.pprof` above with a directory where pprof files will be written and it will iteratively visualize new pprofs as they are written to the file.
+
+## Building
+```
+mkdir build && cd build
+cmake ..
+make
+```
+now you have a `sixpp`.
