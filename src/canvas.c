@@ -80,14 +80,18 @@ bool Box_draw(Canvas *c, Box *b, char val) {
     for (int j = y0; j < y1; ++j)
       c->data[c->width * j + i] = val;
 
-  // Draw one-pixel border
+  // Draw two-pixel border
   for (int i = x0; i < x1; ++i) {
     c->data[c->width * y0 + i] = 0xff;
+    c->data[c->width * (y0+1) +i ] = 0xff;
     c->data[c->width * y1 + i] = 0xff;
+    c->data[c->width * (y1-1) + i] = 0xff;
   }
   for (int j = y0; j < y1; ++j) {
     c->data[c->width * j + x0] = 0xff;
+    c->data[c->width * j + x0+1] = 0xff;
     c->data[c->width * j + x1] = 0xff;
+    c->data[c->width * j + x1-1] = 0xff;
   }
 
   return true;

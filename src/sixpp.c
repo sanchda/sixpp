@@ -15,7 +15,7 @@ double SPPTreeNode_draw(SPPTreeNode *node, PPProfile *profile, Canvas *canvas, i
   Box box = {.height = h, .x0 = x0, .y0 = h*depth};
   box.width = ((double)node->val) / (double)val;
   box.width *= w;
-  if (box.width < 0.01)
+  if (box.width < 0.001)
     return box.width;
 
   uint64_t mapping_id = 0;
